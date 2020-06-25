@@ -1,0 +1,31 @@
+.explanation_container{
+	background-color: #fcf8e3;
+    box-sizing: border-box;
+    width: 100%;
+    display: block;
+    margin-bottom: 1em;
+}
+/*
+input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  outline: none;
+  border: 1px solid black;
+}*/
+
+input.valid {
+  border: 1px solid green;
+}
+
+input.invalid {
+  border: 1px solid red;
+}
+
+input.invalid + .error-message {
+  display: initial;
+}
+
+.error-message {
+  display: none;
+}

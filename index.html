@@ -1,0 +1,230 @@
+<!--(CC-NC-BY) 전승곤 2019-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>MVP model</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet">
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="css/resume.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css"></link>
+
+
+  <script type="text/javascript" src="js/gl-matrix.js"></script>
+  <script type="text/javascript" src="js/WebGLHelloAPI.js"></script>
+
+</head>
+
+<body id="page-top" onload="main()">
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+    <a class="navbar-brand js-scroll-trigger" href="#page-top">
+      <span class="d-none d-lg-block">
+        <!-- <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="img/profile.jpg" alt="">
+       --></span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link js-scroll-trigger" href="#explanation">What is MVP?</a> 
+        </li>
+        <li class="nav-item">
+          <a class="nav-link js-scroll-trigger" href="#example">Example</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link js-scroll-trigger" href="#reference">References</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-fluid p-0">
+
+    <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="explanation">
+      <div class="w-100">
+        <h1 class="mb-0">What is 
+          <span class="text-primary">MVP?</span>
+        </h1>
+        <div class="subheading mb-5">
+        </div>
+        <p class="lead mb-5"><b>컴퓨터 그래픽스</b>에서 MVP 모델이란 물체들의 위치, 크기, 회전의 변환을 행렬 곱으로 쉽게 표현하는 방식을 가르킵니다. Model-View-Projection의 약자로, 각 단계를 순서대로 걸쳐서 비로소 우리가 화면에서 보는 물체들이 보여지게 됩니다.</p>
+        <h3 class="mb-0">Model</h3>
+            <p>Model 단계에서는 각 물체들을 구성하는 Vertex들의 위치를 World 좌표로 바꿔줍니다. </p>
+            <img width=500 height=300 style="margin: 30px;" src="img/explain1.png"></img>
+            <br/>
+            <p>위 그림과 같이 구와 직육면체가 있을 경우, 사용자가 구의 위치만 옮기고 싶으면 구를 구성하고 있는 vertex들의 위치만 변형시켜 주고, 직육면체의 vertex들의 위치는 바꾸면 안됩니다. 그렇기 때문에 각각의 물체(object)들은 자신만의 변환 행렬을 가져야하고, 이를 Model matrix라고 부릅니다. 이를 통해 각 물체들이 가지는 위치, 회전, 크기를 각각 정해줄 수 있습니다.</p>
+
+        <h3 class="mb-0">View</h3>
+            <p>View 단계에서는 물체들을 보고 있는 눈(Camera)의 위치를 정해줍니다. </p>
+            <img width=500 height=300 style="margin: 30px;" src="img/explain2.png"></img>
+            <br/>
+            <p>위 그림과 같이 카메라의 위치에 따라서 보여지는 직육면체나 구의 위치나 크기가 다르게 보입니다. 그렇게 때문에 모델 자체의 local 좌표를 World 좌표로 바꿔 준 다음, 보는 사람의 위치에 따라서 전체 세상(world)를 다르게 보여주는 처리를 해야합니다. 이를 위해서 카메라를 뒤로 움직이고 싶다면 반대로 모든 vertex들을 앞으로 보내거나, 카메라를 왼쪽으로 회전하고자 하면 전체 화면을 반대로 오른쪽으로 회전하는 변환행렬을 적용시켜 줘야하는데, 이를 View 행렬이라 부릅니다.</p> 
+
+        <h3 class="mb-0">Projection</h3>
+            <p>Projection 단계에서는 물체들의 vertex들이 카메라 화면의 어느 위치에 존재하는지를 정합니다. </p>
+            <img width=250 height=400 style="margin: 30px;float: left;" src="img/explain3.jpg"></img>
+            <br/><br/><br/><br/><br/><br/>
+            <p>Projection은 우리말로 표현하면 정사영과 비슷한 개념이라고 생각하시면 됩니다. View 단계에서 카메라의 위치를 정해줬으면 모든 vertix를 카메라가 보는 방향과 수직인 방향으로 정사영시켜서 한 평면을 만들고, 그것을 화면에 보여주는 겁니다. Projection의 방식에 따라서 다양한 방식으로 세상을 표현할 수 있습니다. 수학 시간때 3차원 좌표를 그릴때 자주 쓰는 직각 투시법(orthographic projection), 원근법이 보장되는 투시원근법(perspective projection) 등 다양한 종류가 있습니다. 수업시간때 배운 왼쪽 사진처럼 projection도 가능합니다.</p> 
+      </div>
+    </section>
+
+    <hr class="m-0">
+
+    <section class="resume-section p-3 p-lg-5 d-flex justify-content-center" id="example">
+      <div class="w-100">
+        <h2 class="mb-5">Example</h2>
+
+        <div class="subheading mb-3">MVP 행렬을 전부 정하였으면 이제 각 행렬을 곱하면 됩니다!!</div>
+      
+
+        <div id="explanation" class="explanation_container container">
+          <div class="row">
+            <div class="col-sm-5">
+              <canvas id="helloapicanvas" style="border: none;" width="400" height="400"></canvas>
+          <!-- <button onclick="trXinc()">Translate X + 0.1</button>
+          <button onclick="animRotate()">Animation Rotate + 0.01</button> -->
+            </div>
+            <div class="col-sm-7">
+              <div class="row" style="margin: 10px;">
+                <p> 이 예제에서 위에서 배운 Model, View 행렬의 값을 바꾸어서 화면을 전환시켜 봅시다. Model 행렬은 가운데에 보이는 큐브 object에만 적용됩니다.</p>
+                <p> Projection 행렬은 고정되어있습니다. </p>
+              </div>
+              <div class="row">       
+                <div class="col-sm">
+                  <p id="webTrX"> Projection Matrix </p>
+                  <table border=1> 
+                    <tr ><td id="Pmatrix0"></td>  <td id="Pmatrix4"></td> <td id="Pmatrix8"></td>   <td id="Pmatrix12"></td> </tr>
+                    <tr><td id="Pmatrix1"></td>   <td id="Pmatrix5"></td> <td id="Pmatrix9"></td>   <td id="Pmatrix13"></td> </tr>
+                    <tr><td id="Pmatrix2"></td>   <td id="Pmatrix6"></td> <td id="Pmatrix10"></td>  <td id="Pmatrix14"></td> </tr>
+                    <tr><td id="Pmatrix3"></td>   <td id="Pmatrix7"></td> <td id="Pmatrix11"></td>  <td id="Pmatrix15"></td> </tr>
+                  </table>
+                </div>
+
+                <div class="col-sm">
+                  <p id="webTrX"> View Matrix </p>
+                  <table border=1> 
+                    <tr ><td id="Vmatrix0"></td>  <td id="Vmatrix4"></td> <td id="Vmatrix8"></td>   <td id="Vmatrix12"></td> </tr>
+                    <tr><td id="Vmatrix1"></td>   <td id="Vmatrix5"></td> <td id="Vmatrix9"></td>   <td id="Vmatrix13"></td> </tr>
+                    <tr><td id="Vmatrix2"></td>   <td id="Vmatrix6"></td> <td id="Vmatrix10"></td>  <td id="Vmatrix14"></td> </tr>
+                    <tr><td id="Vmatrix3"></td>   <td id="Vmatrix7"></td> <td id="Vmatrix11"></td>  <td id="Vmatrix15"></td> </tr>
+                  </table>
+                </div>
+                
+                <div class="col-sm">
+                  <p id="webTrX"> Model Matrix </p>
+                  <table border=1> 
+                    <tr ><td id="Mmatrix0"></td>  <td id="Mmatrix4"></td> <td id="Mmatrix8"></td>   <td id="Mmatrix12"></td> </tr>
+                    <tr><td id="Mmatrix1"></td>   <td id="Mmatrix5"></td> <td id="Mmatrix9"></td>   <td id="Mmatrix13"></td> </tr>
+                    <tr><td id="Mmatrix2"></td>   <td id="Mmatrix6"></td> <td id="Mmatrix10"></td>  <td id="Mmatrix14"></td> </tr>
+                    <tr><td id="Mmatrix3"></td>   <td id="Mmatrix7"></td> <td id="Mmatrix11"></td>  <td id="Mmatrix15"></td> </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+
+        <div class="row">
+        <div class="col-sm">
+          Model matrix
+          <br/>Translate
+          <br/> X:&nbsp;&nbsp;&nbsp;-1.0 <input type="range" id="Md_xtranslate" min="-1.0" max="1.0" value="0.0" step="0.01" style="width:250px"> 1.0 &nbsp; value: <span>0</span>
+          <br/> Y:&nbsp;&nbsp;&nbsp;-1.0 <input type="range" id="Md_ytranslate" min="-1.0" max="1.0" value="0.0" step="0.01" style="width:250px"> 1.0 &nbsp; value: <span>0</span>
+          <br/> Z:&nbsp;&nbsp;&nbsp;-1.0 <input type="range" id="Md_ztranslate" min="-1.0" max="1.0" value="0.0" step="0.01" style="width:250px"> 1.0 &nbsp; value: <span>0</span>
+        
+          <br/> Rotate
+          <br/> X:&nbsp;&nbsp;&nbsp;-180.0 <input type="range" id="Md_xrotate" min="-180.0" max="180.0" value="0.0" step="0.01" style="width:250px"> 180.0 &nbsp; value: <span>0</span>
+          <br/> Y:&nbsp;&nbsp;&nbsp;-180.0 <input type="range" id="Md_yrotate" min="-180.0" max="180.0" value="0.0" step="0.01" style="width:250px"> 180.0 &nbsp; value: <span>0</span>
+          <br/> Z:&nbsp;&nbsp;&nbsp;-180.0 <input type="range" id="Md_zrotate" min="-180.0" max="180.0" value="0.0" step="0.01" style="width:250px"> 180.0 &nbsp; value: <span>0</span>
+        
+
+        </div>
+        <div class="col-sm">
+          View matrix
+          <br/>Translate
+          <br> X:&nbsp;&nbsp;&nbsp;-10.0 <input type="range" id="Vi_xtranslate" min="-10.0" max="10.0" value="0.0" step="0.01" style="width:250px"> 10.0 &nbsp; value: <span>0</span>
+          <br> Y:&nbsp;&nbsp;&nbsp;-10.0 <input type="range" id="Vi_ytranslate" min="-10.0" max="10.0" value="0.0" step="0.01" style="width:250px"> 10.0 &nbsp; value: <span>0</span>
+          <br> Z:&nbsp;&nbsp;&nbsp;-10.0 <input type="range" id="Vi_ztranslate" min="-10.0" max="10.0" value="4.0" step="0.01" style="width:250px"> 10.0 &nbsp; value: <span>4</span>
+
+
+          <br/> Rotate
+          <br/> X:&nbsp;&nbsp;&nbsp;-180.0 <input type="range" id="Vi_xrotate" min="-180.0" max="180.0" value="0.0" step="0.01" style="width:250px"> 180.0 &nbsp; value: <span>0</span>
+          <br/> Y:&nbsp;&nbsp;&nbsp;-180.0 <input type="range" id="Vi_yrotate" min="-180.0" max="180.0" value="0.0" step="0.01" style="width:250px"> 180.0 &nbsp; value: <span>0</span>
+          <br/> Z:&nbsp;&nbsp;&nbsp;-180.0 <input type="range" id="Vi_zrotate" min="-180.0" max="180.0" value="0.0" step="0.01" style="width:250px"> 180.0 &nbsp; value: <span>0</span>
+        
+        </div>
+        </div>
+          <!-- <div class="resume-date text-md-right">
+            <span class="text-primary">March 2013 - Present</span>
+          </div> -->
+        </div>
+
+    </section>
+
+    <hr class="m-0">
+
+    <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="reference">
+      <div class="w-100">
+        <h2 class="mb-5">References</h2>
+
+        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
+          <div class="resume-content">
+            <div class="subheading mb-3">Design Idea</div>
+            <div><a href="http://learnwebgl.brown37.net/transformations2/transformations_rotate.html">http://learnwebgl.brown37.net/transformations2/transformations_rotate.html</a></div>
+          </div>
+        </div>
+
+        <div class="resume-item d-flex flex-column flex-md-row justify-content-between">
+          <div class="resume-content">
+            <div class="subheading mb-3">Explanation</div>
+            <div><a href="http://www.opengl-tutorial.org/kr/beginners-tutorials/tutorial-3-matrices/#%EB%AA%A8%EB%8D%B8-%EB%B7%B0-%ED%94%84%EB%A1%9C%EC%A0%9D%EC%85%98-%ED%96%89%EB%A0%AC">http://www.opengl-tutorial.org/kr/beginners-tutorials/tutorial-3-matrices/#%EB%AA%A8%EB%8D%B8-%EB%B7%B0-%ED%94%84%EB%A1%9C%EC%A0%9D%EC%85%98-%ED%96%89%EB%A0%AC</a></div>
+        
+        <div class="resume-item d-flex flex-column flex-md-row justify-content-between">
+          <div class="resume-content">
+            <br/>
+            <div class="subheading mb-3">Web template</div>
+            <div<a href="https://startbootstrap.com/themes/resume/">https://startbootstrap.com/themes/resume/</a></div>
+
+          </div>
+          
+        </div>
+
+      </div>
+    </section>
+
+
+    
+
+  </div>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Plugin JavaScript -->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="js/resume.min.js"></script>
+  <script type="text/javascript" src="js/subfunctions.js"></script>
+
+</body>
+
+</html>
