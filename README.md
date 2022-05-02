@@ -39,4 +39,4 @@ Finally, you can check the code in the WebGLHelloAPI.js, setCamera, drawcube fun
 
 
 ## Contact
-vskylife5901@ajou.ac.kr
+ftatp5901@gmail.com
